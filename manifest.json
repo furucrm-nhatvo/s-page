@@ -1,0 +1,23 @@
+{
+    "id": "IDIAjAuoJng",
+    "manifest_version": 1,
+    "name": "resolver S-Page Analyzer Dev",
+    "description": "A Quip Live App",
+    "version_name": "0.1.0",
+    "version_number": 72,
+    "sizing_mode": "fill_container",
+    "initial_height": 300,
+    "initial_width": -1,
+    "toolbar_color": "blue",
+    "toolbar_icon": "assets/icons/toolbar.svg",
+    "thumbnail": "assets/icons/thumbnail.svg",
+    "js_files": ["dist/app.js"],
+    "css_files": ["assets/styles.css"],
+    "disable_app_level_comments": false,
+    "csp_sources": {
+        "connect_srcs": [
+            "https://*.salesforce.com",
+            "https://*.cloudfunctions.net"
+        ]
+    }
+}
