@@ -8,7 +8,7 @@ export default function SalesforceSync() {
     const rootRecord = quip.apps.getRootRecord() as RootEntity
     
     useEffect(()=>{
-        // timer()
+        timer()
         // sync()
         return ()=>{
             clearInterval(interval)
@@ -67,7 +67,7 @@ export default function SalesforceSync() {
             const updatedLookupString = updatedLookupRecords.reduce((str:string, curr:any, index:number)=>{
                 updatedLookupRecordsReduce[curr.Id] = curr
                 if(index!==updatedLookupRecords.length-1){
-                    return str + `Quip_User_Name__c+=+'${curr.Id}'or`
+                    return str + `Quip_User_Name__c+=+'${curr.Id}'+or+`
                 }
                 return str + `Quip_User_Name__c+=+'${curr.Id}'`   
             },"")
@@ -111,14 +111,23 @@ export default function SalesforceSync() {
     }
     const timer = async ()=>{
         interval = setInterval(async ()=>{
+           
             if(!rootRecord.get('salesforceUrl')){
                 return
             }
-            if(!rootRecord.get('syncing') && Date.now()>rootRecord.get('nextSync')){
+            const standardCondition = !rootRecord.get('syncing') && Date.now()>rootRecord.get('nextSync')
+            const fallbackCondition = Date.now()-rootRecord.get('lastSyncTime') > 2*60*60*1000
+            
+            if(standardCondition || fallbackCondition){
                 rootRecord.set('syncing', true)
-                await sync()
-                rootRecord.set('nextSync', nextHour())
+                rootRecord.set('lastSyncTime', Date.now())
+                try {
+                    await sync()
+                } catch(e){
+                    console.log(e)
+                }
                 rootRecord.set('syncing', false)
+                rootRecord.set('nextSync', nextHour())
             }
         }, 5000)
 

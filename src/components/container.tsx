@@ -4,7 +4,7 @@ import DialogWrapperFixed from "./dialogWrapperFixed";
 import Charts from "./charts";
 import { Collapse } from "@material-ui/core";
 import { IconButton, withWidth } from "@material-ui/core";
-import { Visibility, PeopleAlt, Star, BarChart, CloudOutlined } from "@material-ui/icons";
+import { Visibility, PeopleAlt, Star, BarChart, CloudOffOutlined, CloudOutlined } from "@material-ui/icons";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
@@ -150,7 +150,31 @@ export default function FullScreen(props: any) {
       );
     }
   };
-
+  const getOrgIcon = () => {
+    const isAdmin = getIsAdmin();
+    if (isAdmin) {
+      return (
+        <>
+          {quip.apps.getRootRecord().get('salesforceUrl')
+          ?<IconButton
+              className={classes.iconButton}
+              aria-label="open org"
+              onClick={openOrg}
+            >
+              <CloudOutlined />
+            </IconButton>
+            : <IconButton 
+                className={classes.iconButton}
+                aria-label="Admin User"
+                onClick={handleAdminOpen}
+              >
+                  <CloudOffOutlined />
+              </IconButton>
+            }
+        </>
+      );
+    }
+  };
   const getChartIcon = () => {
     const isAdmin = getIsAdmin();
     if (!(isAdminOnly && !isAdmin)) {
@@ -174,7 +198,7 @@ export default function FullScreen(props: any) {
     </div>
   );
   const openOrg = ()=>{
-    
+    quip.apps.openLink(quip.apps.getRootRecord().get('salesforceUrl'))
   }
   return (
     <>
@@ -251,13 +275,7 @@ export default function FullScreen(props: any) {
             </IconButton>
             <div className="inline">{allViews.length}</div>
             {getChartIcon()}
-            <IconButton
-              className={classes.iconButton}
-              aria-label="open org"
-              onClick={openOrg}
-            >
-              <CloudOutlined />
-            </IconButton>
+            {getOrgIcon()}
             {getAdminIcon()}
           </div>
           <Collapse in={isTableOpen}>{table}</Collapse>

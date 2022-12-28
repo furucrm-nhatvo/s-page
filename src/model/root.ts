@@ -27,7 +27,8 @@ export class RootEntity extends quip.apps.RootRecord {
             salesforceId:"string",
             syncing:'boolean',
             nextSync:'number',
-            snapshot: 'object'
+            snapshot: 'object',
+            lastSyncTime:'number'
         };
     }
     
@@ -41,7 +42,8 @@ export class RootEntity extends quip.apps.RootRecord {
             isAdminOnly:false,
             syncing:false,
             nextSync:0,
-            snapshot:{}
+            snapshot:{},
+            lastSyncTime:0
         };
     }
 
